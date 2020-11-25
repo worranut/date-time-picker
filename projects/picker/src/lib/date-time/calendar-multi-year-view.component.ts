@@ -36,7 +36,7 @@ export const YEAR_ROWS = 7;
     selector: 'owl-date-time-multi-year-view',
     templateUrl: './calendar-multi-year-view.component.html',
     styleUrls: ['./calendar-multi-year-view.component.scss'],
-    host:{
+    host: {
         '[class.owl-dt-calendar-view]': 'owlDTCalendarView',
         '[class.owl-dt-calendar-multi-year-view]': 'owlDTCalendarMultiYearView'
     },
@@ -55,7 +55,7 @@ export class OwlMultiYearViewComponent<T> implements OnInit, AfterContentInit {
         return this._selectMode;
     }
 
-    set selectMode( val: SelectMode ) {
+    set selectMode(val: SelectMode) {
         this._selectMode = val;
         if (this.initiated) {
             this.setSelectedYears();
@@ -70,7 +70,7 @@ export class OwlMultiYearViewComponent<T> implements OnInit, AfterContentInit {
         return this._selected;
     }
 
-    set selected( value: T | null ) {
+    set selected(value: T | null) {
         const oldSelected = this._selected;
         value = this.dateTimeAdapter.deserialize(value);
         this._selected = this.getValidDate(value);
@@ -86,8 +86,8 @@ export class OwlMultiYearViewComponent<T> implements OnInit, AfterContentInit {
         return this._selecteds;
     }
 
-    set selecteds( values: T[] ) {
-        this._selecteds = values.map(( v ) => {
+    set selecteds(values: T[]) {
+        this._selecteds = values.map((v) => {
             v = this.dateTimeAdapter.deserialize(v);
             return this.getValidDate(v);
         });
@@ -100,7 +100,7 @@ export class OwlMultiYearViewComponent<T> implements OnInit, AfterContentInit {
         return this._pickerMoment;
     }
 
-    set pickerMoment( value: T ) {
+    set pickerMoment(value: T) {
         const oldMoment = this._pickerMoment;
         value = this.dateTimeAdapter.deserialize(value);
         this._pickerMoment = this.getValidDate(value) || this.dateTimeAdapter.now();
@@ -114,13 +114,13 @@ export class OwlMultiYearViewComponent<T> implements OnInit, AfterContentInit {
     /**
      * A function used to filter which dates are selectable
      * */
-    private _dateFilter: ( date: T ) => boolean;
+    private _dateFilter: (date: T) => boolean;
     @Input()
     get dateFilter() {
         return this._dateFilter;
     }
 
-    set dateFilter( filter: ( date: T ) => boolean ) {
+    set dateFilter(filter: (date: T) => boolean) {
         this._dateFilter = filter;
         if (this.initiated) {
             this.generateYearList();
@@ -134,7 +134,7 @@ export class OwlMultiYearViewComponent<T> implements OnInit, AfterContentInit {
         return this._minDate;
     }
 
-    set minDate( value: T | null ) {
+    set minDate(value: T | null) {
         value = this.dateTimeAdapter.deserialize(value);
         this._minDate = this.getValidDate(value);
         if (this.initiated) {
@@ -149,7 +149,7 @@ export class OwlMultiYearViewComponent<T> implements OnInit, AfterContentInit {
         return this._maxDate;
     }
 
-    set maxDate( value: T | null ) {
+    set maxDate(value: T | null) {
         value = this.dateTimeAdapter.deserialize(value);
         this._maxDate = this.getValidDate(value);
         if (this.initiated) {
@@ -230,9 +230,9 @@ export class OwlMultiYearViewComponent<T> implements OnInit, AfterContentInit {
         return true;
     }
 
-    constructor( private cdRef: ChangeDetectorRef,
-                 private pickerIntl: OwlDateTimeIntl,
-                 @Optional() private dateTimeAdapter: DateTimeAdapter<T> ) {
+    constructor(private cdRef: ChangeDetectorRef,
+        private pickerIntl: OwlDateTimeIntl,
+        @Optional() private dateTimeAdapter: DateTimeAdapter<T>) {
     }
 
     public ngOnInit() {
@@ -247,11 +247,11 @@ export class OwlMultiYearViewComponent<T> implements OnInit, AfterContentInit {
     /**
      * Handle a calendarCell selected
      */
-    public selectCalendarCell( cell: CalendarCell ): void {
+    public selectCalendarCell(cell: CalendarCell): void {
         this.selectYear(cell.value);
     }
 
-    private selectYear( year: number ): void {
+    private selectYear(year: number): void {
         this.yearSelected.emit(this.dateTimeAdapter.createDate(year, 0, 1));
         const firstDateOfMonth = this.dateTimeAdapter.createDate(
             year,
@@ -274,7 +274,7 @@ export class OwlMultiYearViewComponent<T> implements OnInit, AfterContentInit {
     /**
      * Generate the previous year list
      * */
-    public prevYearList( event: any ): void {
+    public prevYearList(event: any): void {
         this._pickerMoment = this.dateTimeAdapter.addCalendarYears(this.pickerMoment, -1 * YEAR_ROWS * YEARS_PER_ROW);
         this.generateYearList();
         event.preventDefault();
@@ -283,7 +283,7 @@ export class OwlMultiYearViewComponent<T> implements OnInit, AfterContentInit {
     /**
      * Generate the next year list
      * */
-    public nextYearList( event: any ): void {
+    public nextYearList(event: any): void {
         this._pickerMoment = this.dateTimeAdapter.addCalendarYears(this.pickerMoment, YEAR_ROWS * YEARS_PER_ROW);
         this.generateYearList();
         event.preventDefault();
@@ -324,7 +324,7 @@ export class OwlMultiYearViewComponent<T> implements OnInit, AfterContentInit {
         return !this.maxDate || !this.isSameYearList(this._pickerMoment, this.maxDate);
     }
 
-    public handleCalendarKeydown( event: KeyboardEvent ): void {
+    public handleCalendarKeydown(event: KeyboardEvent): void {
         let moment;
         switch (event.keyCode) {
             // minus 1 year
@@ -393,11 +393,11 @@ export class OwlMultiYearViewComponent<T> implements OnInit, AfterContentInit {
     /**
      * Creates an CalendarCell for the given year.
      */
-    private createYearCell( year: number ): CalendarCell {
+    private createYearCell(year: number): CalendarCell {
         const startDateOfYear = this.dateTimeAdapter.createDate(year, 0, 1);
         const ariaLabel = this.dateTimeAdapter.getYearName(startDateOfYear);
         const cellClass = 'owl-dt-year-' + year;
-        return new CalendarCell(year, year.toString(), ariaLabel, this.isYearEnabled(year), false, cellClass);
+        return new CalendarCell(year, ariaLabel, ariaLabel, this.isYearEnabled(year), false, cellClass);
     }
 
     private setSelectedYears(): void {
@@ -409,7 +409,7 @@ export class OwlMultiYearViewComponent<T> implements OnInit, AfterContentInit {
         }
 
         if (this.isInRangeMode && this.selecteds) {
-            this._selectedYears = this.selecteds.map(( selected ) => {
+            this._selectedYears = this.selecteds.map((selected) => {
                 if (this.dateTimeAdapter.isValid(selected)) {
                     return this.dateTimeAdapter.getYear(selected);
                 } else {
@@ -420,7 +420,7 @@ export class OwlMultiYearViewComponent<T> implements OnInit, AfterContentInit {
     }
 
     /** Whether the given year is enabled. */
-    private isYearEnabled( year: number ) {
+    private isYearEnabled(year: number) {
         // disable if the year is greater than maxDate lower than minDate
         if (year === undefined || year === null ||
             (this.maxDate && year > this.dateTimeAdapter.getYear(this.maxDate)) ||
@@ -437,7 +437,7 @@ export class OwlMultiYearViewComponent<T> implements OnInit, AfterContentInit {
 
         // If any date in the year is enabled count the year as enabled.
         for (let date = firstOfYear; this.dateTimeAdapter.getYear(date) == year;
-             date = this.dateTimeAdapter.addCalendarDays(date, 1)) {
+            date = this.dateTimeAdapter.addCalendarDays(date, 1)) {
             if (this.dateFilter(date)) {
                 return true;
             }
@@ -446,7 +446,7 @@ export class OwlMultiYearViewComponent<T> implements OnInit, AfterContentInit {
         return false;
     }
 
-    private isSameYearList( date1: T, date2: T ): boolean {
+    private isSameYearList(date1: T, date2: T): boolean {
         return Math.floor(this.dateTimeAdapter.getYear(date1) / (YEARS_PER_ROW * YEAR_ROWS)) ===
             Math.floor(this.dateTimeAdapter.getYear(date2) / (YEARS_PER_ROW * YEAR_ROWS));
     }
@@ -454,7 +454,7 @@ export class OwlMultiYearViewComponent<T> implements OnInit, AfterContentInit {
     /**
      * Get a valid date object
      */
-    private getValidDate( obj: any ): T | null {
+    private getValidDate(obj: any): T | null {
         return (this.dateTimeAdapter.isDateInstance(obj) && this.dateTimeAdapter.isValid(obj)) ? obj : null;
     }
 
